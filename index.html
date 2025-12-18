@@ -4,18 +4,69 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kontrol LED IoT</title>
+
   <style>
-    body{font-family:Arial;text-align:center;margin:40px}
-    a{display:inline-block;font-size:22px;padding:12px 22px;margin:10px;border:1px solid #ccc;text-decoration:none}
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    button {
+      font-size: 22px;
+      padding: 15px 30px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      color: white;
+    }
+    .on {
+      background-color: #28a745;
+    }
+    .off {
+      background-color: #dc3545;
+    }
+    #status {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #333;
+    }
+    .note {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
+
 <body>
-  <h1>Kontrol LED IoT (ThingSpeak)</h1>
 
-  <a href="https://api.thingspeak.com/update?api_key=14KAKGRINQPLSQWA&field1=1">LED ON</a>
-  <a href="https://api.thingspeak.com/update?api_key=14KAKGRINQPLSQWA&field1=0">LED OFF</a>
+  <h1>Kontrol LED IoT</h1>
 
-  <p>Catatan: ThingSpeak membatasi update (umumnya ~15 detik). Jangan klik terlalu cepat.</p>
+  <button class="on" onclick="kirim(1)">LED ON</button>
+  <button class="off" onclick="kirim(0)">LED OFF</button>
+
+  <div id="status">Status: Menunggu perintah</div>
+  <div class="note">
+    * Klik tombol maksimal 1x tiap ±15 detik (batas ThingSpeak)
+  </div>
+
+  <script>
+    const API_KEY = "14KAKGRINQPLSQWA"; // ← GANTI INI
+
+    function kirim(nilai) {
+      // kirim request TANPA pindah halaman
+      const img = new Image();
+      img.src = `https://api.thingspeak.com/update?api_key=${API_KEY}&field1=${nilai}&t=${Date.now()}`;
+
+      document.getElementById("status").innerHTML =
+        "Status: Perintah dikirim → LED " + (nilai === 1 ? "ON" : "OFF");
+    }
+  </script>
+
 </body>
 </html>
-

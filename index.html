@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kontrol LED IoT</title>
+  <style>
+    body{font-family:Arial, sans-serif; text-align:center; margin:40px}
+    button{font-size:20px; padding:12px 22px; margin:10px; cursor:pointer}
+    .hint{opacity:.8}
+  </style>
+</head>
+<body>
+  <h1>Kontrol LED IoT (ThingSpeak)</h1>
+
+  <button onclick="setLed(1)">LED ON</button>
+  <button onclick="setLed(0)">LED OFF</button>
+
+  <p id="info" class="hint">Klik tombol untuk mengirim perintah…</p>
+
+  <script>
+    const WRITE_API_KEY = "14KAKGRINQPLSQWA"; // <-- ganti ini
+    async function setLed(val){
+      const url = `https://api.thingspeak.com/update?api_key=${14KAKGRINQPLSQWA}&field1=${val}`;
+      document.getElementById("info").textContent = "Mengirim perintah...";
+      try{
+        const res = await fetch(url);
+        const text = await res.text(); // biasanya balas entry_id atau "0"
+        document.getElementById("info").textContent =
+          (text.trim()==="0") ? "Gagal (balasan 0). Cek API key / rate limit ThingSpeak."
+                              : `Berhasil! field1=${val} (entry: ${text.trim()})`;
+      }catch(e){
+        document.getElementById("info").textContent = "Error: " + e;
+      }
+    }
+  </script>
+</body>
+</html>
